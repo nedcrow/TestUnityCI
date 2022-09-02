@@ -100,7 +100,7 @@
 #           path: build/StandaloneWindows64
 
 
-name: Build project action
+name: Build project action2
 
 on:   
   pull_request:
