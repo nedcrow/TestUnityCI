@@ -100,7 +100,7 @@
 #           path: build/StandaloneWindows64
 
 
-name: Build project
+name: Build project action
 
 on: [push] # pull_request
 
@@ -113,7 +113,7 @@ jobs:
       matrix:
         targetPlatform:
           - StandaloneWindows64 # Build a Windows 64-bit standalone.
-          
+
     steps:
       - uses: actions/checkout@v2
         with:
