@@ -128,8 +128,10 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: Library
-          key: Library
-          # restore-keys: Library-
+          key: Library-build-StandaloneWindows64
+          restore-keys: |
+            Library-build-
+            Library-
 
       - name: Build project
         uses: game-ci/unity-builder@v2
