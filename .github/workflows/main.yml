@@ -91,7 +91,6 @@ jobs:
           # testMode: all
           testMode: ${{ matrix.testMode }}
           checkName: ${{ matrix.testMode }} test results
-          unityVersion: ${{ matrix.unityVersion }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
       # Output
