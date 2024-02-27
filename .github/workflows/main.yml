@@ -1,9 +1,6 @@
-name: GameCI Template2 🎮
+name: GameCI Template 🎮
 
 on: push
-
-env:
-  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
 
 jobs:
   testRunner:
@@ -23,7 +20,7 @@ jobs:
         run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
 
       - name: Restore LFS cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: lfs-cache
         with:
           path: .git/lfs
@@ -35,7 +32,7 @@ jobs:
           git add .
           git reset --hard
       - name: Restore Library cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: Library
           key: Library-test-project
@@ -51,7 +48,7 @@ jobs:
           checkName: ${{ matrix.testMode }} test results
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: Test results (${{ matrix.testMode }})
           # name: Test results (all mode)
@@ -71,7 +68,7 @@ jobs:
         run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
 
       - name: Restore LFS cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: lfs-cache
         with:
           path: .git/lfs
@@ -83,64 +80,21 @@ jobs:
           git add .
           git reset --hard
       - name: Restore Library cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: Library
           key: Library-build-StandaloneWindows64
           restore-keys: |
             Library-build-
             Library-
-      - uses: game-ci/unity-builder@v2
+      - uses: game-ci/unity-builder@4
+        env:
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
         with:
           targetPlatform: StandaloneWindows64
-
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: build-StandaloneWindows64
           path: build/StandaloneWindows64
-
-
-# name: Build project action
-
-# on:   
-#   pull_request:
-#   push:
-#     branches:
-#       - main
-
-# jobs:
-#   buildForAllSupportedPlatforms:
-#     name: Build for ${{ matrix.targetPlatform }}
-#     runs-on: ubuntu-latest
-#     strategy:
-#       fail-fast: false
-#       matrix:
-#         targetPlatform:
-#           - StandaloneWindows64 # Build a Windows 64-bit standalone.
-
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@v2
-#         with:
-#           fetch-depth: 0
-#           lfs: true
-          
-#       - uses: actions/cache@v2
-#         with:
-#           path: Library
-#           key: Library-build-StandaloneWindows64
-#           restore-keys: |
-#             Library-build-
-#             Library-
-
-#       - name: Build project
-#         uses: game-ci/unity-builder@v2
-#         env:
-#           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-#         with:
-#           targetPlatform: ${{ matrix.targetPlatform }}
-
-#       - uses: actions/upload-artifact@v2
-#         with:
-#           name: Build-${{ matrix.targetPlatform }}
-#           path: build/${{ matrix.targetPlatform }}
