@@ -99,90 +99,90 @@ jobs:
           name: Test results (${{ matrix.testMode }})
           path: ${{ steps.testRunner.outputs.artifactsPath }}
 
-  # build:
-  #  needs: test
-  #   name: Build for ${{ matrix.targetPlatform }}
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       unityVersion:
-  #         - 2021.3.5f1
-  #         - 2023.2.10f1
-  #       targetPlatform:
-  #         - StandaloneLinux64
-  #         - iOS
-  #         - Android
-  #         - WebGL
-  #   steps:
-  #     # Checkout
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v4
-  #       with:
-  #         lfs: true
+  build:
+   needs: test
+    name: Build for ${{ matrix.targetPlatform }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        unityVersion:
+          - 2021.3.5f1
+          - 2023.2.10f1
+        targetPlatform:
+          - StandaloneLinux64
+          - iOS
+          - Android
+          - WebGL
+    steps:
+      # Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
 
-  #     # Cache
-  #     - uses: actions/cache@v3
-  #       with:
-  #         path: Library
-  #         key: Library-${{ matrix.targetPlatform }}
-  #         restore-keys: |
-  #           Library-test-project-
-  #           Library-
+      # Cache
+      - uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-${{ matrix.targetPlatform }}
+          restore-keys: |
+            Library-test-project-
+            Library-
 
-  #     # Build
-  #     - uses: game-ci/unity-builder@v4
-  #       env:
-  #         UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-  #         UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-  #         UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-  #       with:
-  #         unityVersion: ${{ matrix.unityVersion }}
-  #         targetPlatform: ${{ matrix.targetPlatform }}
-  #         # allowDirtyBuild: true
+      # Build
+      - uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          # allowDirtyBuild: true
 
-  #     # Output
-  #     - uses: actions/upload-artifact@v3
-  #       with:
-  #         name: Build-${{ matrix.targetPlatform }}
-  #         path: build
+      # Output
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Build-${{ matrix.targetPlatform }}
+          path: build
           
-  # buildForMac:
-  #   needs: build
-  #   name: Build for ${{ matrix.targetPlatform }}
-  #   runs-on: macos-latest
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       targetPlatform:
-  #         - StandaloneOSX
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #       with:
-  #       fetch-depth: 0
-  #         lfs: true
+  buildForMac:
+    needs: build
+    name: Build for ${{ matrix.secondTargetPlatform }}
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        secondTargetPlatform:
+          - StandaloneOSX
+    steps:
+      - uses: actions/checkout@v4
+        with:
+        fetch-depth: 0
+          lfs: true
 
-  #     - uses: actions/cache@v3
-  #       with:
-  #         path: Library
-  #         key: Library-${{ matrix.targetPlatform }}
-  #         restore-keys: |
-  #           Library-test-project-
-  #           Library-
+      - uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-${{ matrix.secondTargetPlatform }}
+          restore-keys: |
+            Library-test-project-
+            Library-
 
-  #     - uses: game-ci/unity-builder@v4
-  #       env:
-  #         UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-  #         UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-  #         UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-  #       with:
-  #         unityVersion: ${{ matrix.unityVersion }}
-  #         targetPlatform: ${{ matrix.targetPlatform }}
+      - uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.secondTargetPlatform }}
 
-  #     - uses: actions/upload-artifact@v3        
-  #       with:
-  #         name: Build-${{ matrix.targetPlatform }}
-  #         path: build
+      - uses: actions/upload-artifact@v3        
+        with:
+          name: Build-${{ matrix.secondTargetPlatform }}
+          path: build
 
 
   # buildForWindows:
