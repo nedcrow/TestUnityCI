@@ -210,7 +210,7 @@ jobs:
             Library-test-project-
             Library-
 
-      - uses: game-ci/unity-builder@4
+      - uses: game-ci/unity-builder@v4
         env:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
