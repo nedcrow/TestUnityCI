@@ -1,25 +1,25 @@
-name: Get Unity license activation file 🔐
+# name: Get Unity license activation file 🔐
 
-# on:
-#   push:
-#     branches:
-#       - main
+# # on:
+# #   push:
+# #     branches:
+# #       - main
 
-on: workflow_dispatch
+# on: workflow_dispatch
 
-jobs:
-  requestManualActivationFile:
-    name: Request manual activation file 🔑
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
+# jobs:
+#   requestManualActivationFile:
+#     name: Request manual activation file 🔑
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
 
-      - uses: game-ci/unity-request-activation-file@v4
-        id: getManualLicenseFile
-        with:
-          unityVersion: 2023.2.10f1
+#       - uses: game-ci/unity-request-activation-file@v4
+#         id: getManualLicenseFile
+#         with:
+#           unityVersion: 2023.2.10f1
 
-      - uses: actions/upload-artifact@v2
-        with:
-          name: Manual Activation File
-          path: ${{ steps.getManualLicenseFile.outputs.filePath }}
+#       - uses: actions/upload-artifact@v2
+#         with:
+#           name: Manual Activation File
+#           path: ${{ steps.getManualLicenseFile.outputs.filePath }}
