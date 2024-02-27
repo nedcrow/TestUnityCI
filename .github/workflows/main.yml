@@ -147,42 +147,42 @@ jobs:
           name: Build-${{ matrix.targetPlatform }}
           path: build
           
-  buildForMac:
-    needs: build
-    name: Build for ${{ matrix.secondTargetPlatform }}
-    runs-on: macos-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        secondTargetPlatform:
-          - StandaloneOSX
-    steps:
-      - uses: actions/checkout@v4
-        with:
-        fetch-depth: 0
-          lfs: true
+  # buildForMac:
+  #   needs: build
+  #   name: Build for ${{ matrix.secondTargetPlatform }}
+  #   runs-on: macos-latest
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       secondTargetPlatform:
+  #         - StandaloneOSX
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       with:
+  #       fetch-depth: 0
+  #         lfs: true
 
-      - uses: actions/cache@v3
-        with:
-          path: Library
-          key: Library-${{ matrix.secondTargetPlatform }}
-          restore-keys: |
-            Library-test-project-
-            Library-
+  #     - uses: actions/cache@v3
+  #       with:
+  #         path: Library
+  #         key: Library-${{ matrix.secondTargetPlatform }}
+  #         restore-keys: |
+  #           Library-test-project-
+  #           Library-
 
-      - uses: game-ci/unity-builder@v4
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        with:
-          unityVersion: ${{ matrix.unityVersion }}
-          targetPlatform: ${{ matrix.secondTargetPlatform }}
+  #     - uses: game-ci/unity-builder@v4
+  #       env:
+  #         UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+  #         UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+  #         UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+  #       with:
+  #         unityVersion: ${{ matrix.unityVersion }}
+  #         targetPlatform: ${{ matrix.secondTargetPlatform }}
 
-      - uses: actions/upload-artifact@v3        
-        with:
-          name: Build-${{ matrix.secondTargetPlatform }}
-          path: build
+  #     - uses: actions/upload-artifact@v3        
+  #       with:
+  #         name: Build-${{ matrix.secondTargetPlatform }}
+  #         path: build
 
 
   # buildForWindows:
