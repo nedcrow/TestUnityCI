@@ -3,43 +3,43 @@ name: GameCI Template 🎮
 on: push
 
 jobs:
-  # checklicense:
-  #   name: Check for UNITY_LICENSE in GitHub Secrets
-  #   runs-on: ubuntu-latest
-  #   outputs:
-  #     is_unity_license_set: ${{ steps.checklicense_job.outputs.is_unity_license_set }}
-  #   steps:
-  #     - name: Check whether unity activation requests should be done
-  #       id: checklicense_job
-  #       env:
-  #         UNITY_LICENSE: ''
-  #         UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-  #         UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-  #       run: |
-  #           echo "Skip activation job: ${{ env.UNITY_LICENSE != '' }}"
-  #           export is_unity_license_set="${{ env.UNITY_LICENSE != '' }}"
-  #           echo "is_unity_license_set=$is_unity_license_set" >> $GITHUB_OUTPUT
+  checklicense:
+    name: Check for UNITY_LICENSE in GitHub Secrets
+    runs-on: ubuntu-latest
+    outputs:
+      is_unity_license_set: ${{ steps.checklicense_job.outputs.is_unity_license_set }}
+    steps:
+      - name: Check whether unity activation requests should be done
+        id: checklicense_job
+        env:
+          UNITY_LICENSE: ''
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        run: |
+            echo "Skip activation job: ${{ env.UNITY_LICENSE != '' }}"
+            export is_unity_license_set="${{ env.UNITY_LICENSE != '' }}"
+            echo "is_unity_license_set=$is_unity_license_set" >> $GITHUB_OUTPUT
 
-  # activation:
-  #   needs: checklicense
-  #   if: needs.checklicense.outputs.is_unity_license_set == 'false'
-  #   name: Request manual activation file 🔑
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     # Request manual activation file
-  #     - name: Request manual activation file
-  #       id: getManualLicenseFile
-  #       uses: game-ci/unity-activate@v2.0.0
-  #     # Upload artifact (Unity_v20XX.X.XXXX.alf)
-  #     - name: Expose as artifact
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: ${{ steps.getManualLicenseFile.outputs.filePath }}
-  #         path: ${{ steps.getManualLicenseFile.outputs.filePath }}
+  activation:
+    needs: checklicense
+    if: needs.checklicense.outputs.is_unity_license_set == 'false'
+    name: Request manual activation file 🔑
+    runs-on: ubuntu-latest
+    steps:
+      # Request manual activation file
+      - name: Request manual activation file
+        id: getManualLicenseFile
+        uses: game-ci/unity-activate@v2.0.0
+      # Upload artifact (Unity_v20XX.X.XXXX.alf)
+      - name: Expose as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.getManualLicenseFile.outputs.filePath }}
+          path: ${{ steps.getManualLicenseFile.outputs.filePath }}
 
   test:
-    # needs: checklicense
-    # if: needs.checklicense.outputs.is_unity_license_set == 'true'
+    needs: checklicense
+    if: needs.checklicense.outputs.is_unity_license_set == 'true'
     name: Test in ${{ matrix.testMode }} ✨
     runs-on: ubuntu-latest
     strategy:
@@ -54,21 +54,21 @@ jobs:
         uses: actions/checkout@v4
 
       # Git LFS
-      # - name: Create LFS file list
-      #   run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
+      - name: Create LFS file list
+        run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
 
-      # - name: Restore LFS cache
-      #   uses: actions/cache@v3
-      #   id: lfs-cache
-      #   with:
-      #     path: .git/lfs
-      #     key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }}
+      - name: Restore LFS cache
+        uses: actions/cache@v3
+        id: lfs-cache
+        with:
+          path: .git/lfs
+          key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }}
 
-      # - name: Git LFS Pull
-      #   run: |
-      #     git lfs pull
-      #     git add .
-      #     git reset --hard
+      - name: Git LFS Pull
+        run: |
+          git lfs pull
+          git add .
+          git reset --hard
 
       # Cache
       - uses: actions/cache@v3
@@ -81,7 +81,7 @@ jobs:
 
       # Test
       - name: Run tests
-        uses: game-ci/unity-test-runner@v4
+        uses: game-ci/unity-test-runner@v4.0.0
         id: testRunner
         env:
           # Personal license
