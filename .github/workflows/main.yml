@@ -101,14 +101,13 @@ jobs:
 
   build:
     needs: test
-    name: Build for ${{ matrix.targetPlatform }}
+    name: Build for ${{ matrix.targetPlatform }}-${{ matrix.unityVersion }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         unityVersion:
           - 2021.3.5f1
-          - 2023.2.10f1
         targetPlatform:
           # - StandaloneOSX
           # - StandaloneWindows
@@ -146,7 +145,7 @@ jobs:
       # Output
       - uses: actions/upload-artifact@v3
         with:
-          name: Build-${{ matrix.targetPlatform }}
+          name: Build-${{ matrix.targetPlatform }}-${{ matrix.unityVersion }}
           path: build
           
   # buildForMac:
