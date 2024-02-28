@@ -84,17 +84,16 @@ jobs:
         uses: game-ci/unity-test-runner@v4.1.1
         id: testRunner
         env:
-          # Personal license
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }} 
-          # Professional license
-          # UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          # UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-          # UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           # testMode: all
           testMode: ${{ matrix.testMode }}
           checkName: ${{ matrix.testMode }} test results
           githubToken: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "test license: ${{ env.UNITY_LICENSE }}"
 
       # Output
       - uses: actions/upload-artifact@v3
