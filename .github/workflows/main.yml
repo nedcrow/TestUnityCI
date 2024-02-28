@@ -17,6 +17,9 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         run: |
             echo "Skip activation job: ${{ env.UNITY_LICENSE != '' }}"
+            echo "Test license = ${{ env.UNITY_LICENSE }}"
+            echo "Test email = ${{ env.UNITY_EMAIL }}"
+            echo "Test password = ${{ env.UNITY_PASSWORD }}"
             export is_unity_license_set="${{ env.UNITY_LICENSE != '' }}"
             echo "is_unity_license_set=$is_unity_license_set" >> $GITHUB_OUTPUT
 
