@@ -80,8 +80,9 @@ jobs:
             Library-
 
       -  run: |
-          echo "test license: ${{ env.UNITY_LICENSE }}"
-          
+          echo "test license: ${{ secrets.UNITY_LICENSE }}"
+          echo "test token: ${{ secrets.GITHUB_TOKEN }}"
+
       # Test
       - name: Run tests
         uses: game-ci/unity-test-runner@v4.1.1
