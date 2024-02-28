@@ -79,6 +79,9 @@ jobs:
             Library-test-project-
             Library-
 
+      -  run: |
+          echo "test license: ${{ env.UNITY_LICENSE }}"
+          
       # Test
       - name: Run tests
         uses: game-ci/unity-test-runner@v4.1.1
@@ -92,8 +95,6 @@ jobs:
           testMode: ${{ matrix.testMode }}
           checkName: ${{ matrix.testMode }} test results
           githubToken: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "test license: ${{ env.UNITY_LICENSE }}"
 
       # Output
       - uses: actions/upload-artifact@v3
