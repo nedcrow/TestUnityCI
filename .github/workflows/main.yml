@@ -81,7 +81,7 @@ jobs:
 
       # Test
       - name: Run tests
-        uses: game-ci/unity-test-runner@v4.0.0
+        uses: game-ci/unity-test-runner@v4.1.1
         id: testRunner
         env:
           # Personal license
